@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apilog.APILog.domain.repository.ClienteRepository;
+import com.apilog.APILog.domain.service.CatalogoClienteService;
 import com.apilog.APILog.model.Cliente;
 
 @RestController
@@ -26,6 +27,9 @@ public class ClienteController {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private CatalogoClienteService catalogoClienteService;
 	
 	@GetMapping
 	public List<Cliente> listar() {
@@ -42,7 +46,7 @@ public class ClienteController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
-		return clienteRepository.save(cliente);
+		return catalogoClienteService.salvar(cliente);
 	}
 	
 	@PutMapping("/{id}")
@@ -51,7 +55,7 @@ public class ClienteController {
 			return ResponseEntity.notFound().build();
 		}
 		cliente.setId(id);
-		cliente = clienteRepository.save(cliente);
+		cliente = catalogoClienteService.salvar(cliente);
 		
 		return ResponseEntity.ok(cliente);
 	}
@@ -62,7 +66,7 @@ public class ClienteController {
 			return ResponseEntity.notFound().build();
 		}
 		
-		clienteRepository.deleteById(id);
+		catalogoClienteService.deletar(id);
 		
 		return ResponseEntity.noContent().build();
 	}
