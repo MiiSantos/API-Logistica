@@ -5,14 +5,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.apilog.APILog.domain.exception.NegocioException;
+import com.apilog.APILog.domain.model.Cliente;
 import com.apilog.APILog.domain.repository.ClienteRepository;
-import com.apilog.APILog.model.Cliente;
 
 @Service
 public class CatalogoClienteService {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	public Cliente buscar(Long id) {
+		return clienteRepository.findById(id)
+				.orElseThrow(() -> new NegocioException("Cliente não encontrado!"));
+	}
 	
 	@Transactional
 	public Cliente salvar(Cliente cliente) {

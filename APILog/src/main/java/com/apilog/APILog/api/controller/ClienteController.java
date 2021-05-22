@@ -1,4 +1,4 @@
-package com.apilog.APILog.controller;
+package com.apilog.APILog.api.controller;
 
 import java.util.List;
 
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apilog.APILog.domain.model.Cliente;
 import com.apilog.APILog.domain.repository.ClienteRepository;
 import com.apilog.APILog.domain.service.CatalogoClienteService;
-import com.apilog.APILog.model.Cliente;
 
 @RestController
 @RequestMapping("/clientes")
