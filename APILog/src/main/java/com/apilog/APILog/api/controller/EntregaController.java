@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,6 +21,7 @@ import com.apilog.APILog.api.model.EntregaModel;
 import com.apilog.APILog.domain.model.Entrega;
 import com.apilog.APILog.domain.repository.EntregaRepository;
 import com.apilog.APILog.domain.service.CriacaoEntregaService;
+import com.apilog.APILog.domain.service.FinalizacaoEntregaService;
 
 import lombok.AllArgsConstructor;
 
@@ -37,11 +39,20 @@ public class EntregaController {
 	@Autowired
 	private EntregaAssembler entregaAssembler;
 	
+	@Autowired
+	private FinalizacaoEntregaService finalizacaoEntregaService;
+	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public EntregaModel solicitar(@Valid @RequestBody Entrega entrega) {
 		Entrega entregaSolicitada = criacaoEntregaservice.solicitar(entrega);
 		return entregaAssembler.toModel(entregaSolicitada);
+	}
+	
+	@PutMapping("/{entregaId}/finalizacao")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void finalizar(@PathVariable Long entregaId) {
+		finalizacaoEntregaService.finalizar(entregaId);
 	}
 	
 	@GetMapping
