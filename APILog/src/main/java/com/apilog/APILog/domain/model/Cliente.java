@@ -1,4 +1,4 @@
-package com.apilog.APILog.model;
+package com.apilog.APILog.domain.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,15 +7,18 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.EqualsAndHashCode;
+import validation.ValidationGroups;
 
 @Entity
 @Table(name = "tb_postagem")
 public class Cliente {
 	
 	@Id
+	@NotNull(groups = ValidationGroups.ClientId.class)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@EqualsAndHashCode.Include
 	private long id;

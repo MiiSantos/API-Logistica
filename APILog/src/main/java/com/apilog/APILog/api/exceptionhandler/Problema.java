@@ -1,6 +1,7 @@
 package com.apilog.APILog.api.exceptionhandler;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -10,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class Problema {
 
 	private Integer status;
-	private LocalDateTime dataHora;
+	private OffsetDateTime dataHora;
 	private String titulo;
 	private List<Campo> campos;
 	
@@ -36,12 +37,6 @@ public class Problema {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	public LocalDateTime getDataHora() {
-		return dataHora;
-	}
-	public void setDataHora(LocalDateTime dataHora) {
-		this.dataHora = dataHora;
-	}
 	public String getTitulo() {
 		return titulo;
 	}
@@ -53,5 +48,11 @@ public class Problema {
 	}
 	public void setCampos(List<Campo> campos) {
 		this.campos = campos;
+	}
+	public OffsetDateTime getDataHora() {
+		return dataHora;
+	}
+	public void setDataHora(OffsetDateTime dataHora) {
+		this.dataHora = dataHora;
 	}
 }
