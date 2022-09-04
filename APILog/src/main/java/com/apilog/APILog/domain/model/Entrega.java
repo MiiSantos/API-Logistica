@@ -2,7 +2,10 @@ package com.apilog.APILog.domain.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,11 +14,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
+import com.apilog.APILog.domain.exception.NegocioException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -44,6 +49,9 @@ public class Entrega {
 	
 	@NotNull
 	private BigDecimal taxa;
+	
+	@OneToMany(mappedBy = "entrega", cascade = CascadeType.ALL)
+	private List<Ocorrencia> ocorrencias = new ArrayList<>();
 	
 	@JsonProperty(access = Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
@@ -96,5 +104,32 @@ public class Entrega {
 	}
 	public void setDataFinalizacao(OffsetDateTime dataFinalizacao) {
 		this.dataFinalizacao = dataFinalizacao;
+	}
+	public List<Ocorrencia> getOcorrencias() {
+		return ocorrencias;
+	}
+	public void setOcorrencias(List<Ocorrencia> ocorrencias) {
+		this.ocorrencias = ocorrencias;
+	}
+	public Ocorrencia adicionarOcorrencia(String descricao) {
+		Ocorrencia ocorrencia = new Ocorrencia();
+		ocorrencia.setDescricao(descricao);
+		ocorrencia.setDataRegistro(OffsetDateTime.now());
+		ocorrencia.setEntrega(this);
+		
+		this.getOcorrencias().add(ocorrencia);
+		
+		return ocorrencia;
+	}
+	public void finalizar() {
+		if(!podeSerFinalizada()) {
+			throw new NegocioException("Entrega não pode ser finalizada.");
+		}
+		setStatus(StatusEntrega.FINALIZADA);
+		setDataFinalizacao(OffsetDateTime.now());
+	}
+	
+	public boolean podeSerFinalizada() {
+		return StatusEntrega.PENDENTE.equals(getStatus());
 	}
 }
